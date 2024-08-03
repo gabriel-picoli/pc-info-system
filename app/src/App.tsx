@@ -6,6 +6,7 @@ import theme from './global/theme'
 import GlobalStyle from './global/GlobalStyle'
 
 import Home from './pages/Home'
+import Clientes from './pages/Clientes'
 
 export default function App() {
    return (
@@ -13,6 +14,7 @@ export default function App() {
          <ThemeProvider theme={theme}>
             <Routes>
                <Route path="/" element={<Home />} />
+               <Route path="/clientes" element={<Clientes />} />
             </Routes>
 
             <GlobalStyle />
