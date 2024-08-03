@@ -12,6 +12,7 @@ const GlobalStyle = createGlobalStyle`
         width: 100wh;
         height: 100vh;
         background-color: #ebebeb;
+        
     }
 `
 
