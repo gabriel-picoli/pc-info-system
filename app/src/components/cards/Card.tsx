@@ -41,11 +41,12 @@ interface CardProps {
    phone: string
    cpf: string
    address: string
+   onClick?: (e: React.MouseEvent<HTMLDivElement>) => void
 }
 
-export default function Card({ name, phone, cpf, address }: CardProps) {
+export default function Card({ name, phone, cpf, address, onClick }: CardProps) {
    return (
-      <CardContainer>
+      <CardContainer onClick={onClick}>
          <Subtitle $fontSize="25px">{name}</Subtitle>
          <Phone>{insertMaskInPhone(phone)}</Phone>
          <Cpf>{insertMaskInCpf(cpf)}</Cpf>
