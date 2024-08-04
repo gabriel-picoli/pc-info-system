@@ -63,7 +63,9 @@ export default function Modal({ isOpen, onClose, children, width, minHeight, tit
             <ModalContainer width={width} minHeight={minHeight}>
                <HeaderContainer>
                   <h1>{title}</h1>
-                  <CloseButton onClick={onClose}>{/* <CloseOutlinedIcon style={{ width: 35, height: 35 }} /> */}</CloseButton>
+                  <CloseButton onClick={onClose}>
+                     <img src="images/close.png" alt="close icon" width={25} height={25} />
+                  </CloseButton>
                </HeaderContainer>
                <div>{children}</div>
             </ModalContainer>
