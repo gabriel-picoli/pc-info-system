@@ -6,7 +6,7 @@ import theme from './global/theme'
 import GlobalStyle from './global/GlobalStyle'
 
 import Home from './pages/Home'
-import Clientes from './pages/Clients'
+import Clientes from './pages/ClientsPage'
 
 export default function App() {
    return (
