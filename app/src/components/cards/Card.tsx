@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 
 import Subtitle from '../tipography/Subtitle'
+import { insertMaskInCpf } from '../../functions/cpf'
+import { insertMaskInPhone } from '../../functions/phone'
 
 const CardContainer = styled.div`
    display: flex;
@@ -9,15 +11,23 @@ const CardContainer = styled.div`
    width: 340px;
    height: 260px;
    border-radius: 10px;
-   padding: 15px;
+   padding: 20px;
    margin-bottom: 40px;
-`
-const Cpf = styled.p`
-   font-size: 18px;
-   margin-top: 10px;
+   transition: transform 0.3s ease, box-shadow 0.3s ease;
+   cursor: pointer;
+
+   &:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+   }
 `
 
 const Phone = styled.p`
+   margin-top: 10px;
+   font-size: 18px;
+`
+
+const Cpf = styled.p`
    font-size: 18px;
    margin-bottom: 30px;
 `
@@ -37,8 +47,8 @@ export default function Card({ name, phone, cpf, address }: CardProps) {
    return (
       <CardContainer>
          <Subtitle $fontSize="25px">{name}</Subtitle>
-         <Cpf>{cpf}</Cpf>
-         <Phone>{phone}</Phone>
+         <Phone>{insertMaskInPhone(phone)}</Phone>
+         <Cpf>{insertMaskInCpf(cpf)}</Cpf>
          <Address>{address}</Address>
       </CardContainer>
    )
