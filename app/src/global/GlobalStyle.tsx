@@ -11,8 +11,8 @@ const GlobalStyle = createGlobalStyle`
     body{
         width: 100wh;
         height: 100vh;
-        background-color: #ebebeb;
-        
+        background-color: ${(props) => props.theme.colors.white};
+
     }
 `
 
