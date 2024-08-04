@@ -70,6 +70,7 @@ export default function Clientes() {
    const [clients, setClients] = useState<Clients[]>([])
    const [showModal, setShowModal] = useState<boolean>(false)
    const [searchTerm, setSearchTerm] = useState<string>('')
+   const [selectedClient, setSelectedClient] = useState<Clients | null>(null)
 
    const { handleSubmit, control, reset } = useForm()
 
@@ -84,6 +85,11 @@ export default function Clientes() {
 
    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearchTerm(event.target.value)
+   }
+
+   const handleCardClick = (client: Clients) => {
+      setSelectedClient(client)
+      setShowModal(true)
    }
 
    const fetchClients = async () => {
@@ -131,7 +137,7 @@ export default function Clientes() {
                   placeholder="Pesquisar"
                   value={searchTerm}
                   onChange={handleSearchChange}
-                  width='400px'
+                  width="400px"
                />
             </Row>
 
@@ -144,6 +150,7 @@ export default function Clientes() {
                         phone={client.telefone}
                         cpf={client.cpf}
                         address={`${client.endereco}, ${client.bairro} - ${client.numero}, ${client.complemento}`}
+                        onClick={() => handleCardClick(client)}
                      />
                   ))
                ) : (
