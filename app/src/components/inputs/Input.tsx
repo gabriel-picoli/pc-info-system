@@ -5,7 +5,7 @@ const StyledInput = styled.input<{ $width?: string; $marginRight?: string }>`
    width: ${(props) => props.$width || '100%'};
    height: 45px;
    background-color: transparent;
-   border: 2px solid #c1e3e3;
+   border: 2px solid #18839e;
    border-radius: 5px;
    padding: 10px;
    font-size: 14px;
