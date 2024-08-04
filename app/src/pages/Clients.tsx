@@ -85,7 +85,7 @@ export default function Clientes() {
                         name={cliente.nome}
                         phone={cliente.telefone}
                         cpf={cliente.cpf}
-                        address={cliente.endereco}
+                        address={`${cliente.endereco}, ${cliente.bairro} - ${cliente.numero}, (${cliente.complemento})`}
                      />
                   ))
                ) : (
