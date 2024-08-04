@@ -1,6 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
-
 import { Cliente } from './cliente.entity';
 import { CadastrarClienteDto } from './dto/cliente.cadastrar.dto';
 import { ResultadoDto } from 'src/dto/resultado.dto';
@@ -27,17 +26,16 @@ export class ClienteService {
     cliente.numero = data.numero;
     cliente.complemento = data.complemento;
 
-    this.clienteRepository.save(cliente);
-
     try {
-      return <ResultadoDto>{
+      await this.clienteRepository.save(cliente);
+      return {
         status: true,
-        message: 'usuario cadastrado',
+        message: 'cliente cadastrado com sucesso',
       };
     } catch (err) {
-      return <ResultadoDto>{
+      return {
         status: false,
-        message: `erro ao cadastrar o usuario: ${err}`,
+        message: `erro ao cadastrar o cliente: ${err.message}`,
       };
     }
   }
