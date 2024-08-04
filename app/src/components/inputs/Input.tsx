@@ -25,6 +25,7 @@ interface InputProps {
    width?: string
    marginRight?: string
    placeholder?: string
+   value?: string
    type: string
    id: string
    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
@@ -37,6 +38,7 @@ export default function Input({
    width,
    marginRight,
    placeholder,
+   value,
    type,
    id,
    onChange,
@@ -51,6 +53,7 @@ export default function Input({
                {...field}
                $width={width}
                $marginRight={marginRight}
+               value={value}
                type={type}
                id={id}
                placeholder={placeholder}

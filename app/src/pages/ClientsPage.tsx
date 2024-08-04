@@ -68,22 +68,27 @@ interface Clients {
 
 export default function Clientes() {
    const [clients, setClients] = useState<Clients[]>([])
-   const [showModal, setShowModal] = useState<boolean>()
+   const [showModal, setShowModal] = useState<boolean>(false)
+   const [searchTerm, setSearchTerm] = useState<string>('')
 
    const { handleSubmit, control, reset } = useForm()
 
    const handleOpenModal = () => {
       setShowModal(true)
    }
+
    const handleCloseModal = () => {
       setShowModal(false)
       reset()
    }
 
+   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchTerm(event.target.value)
+   }
+
    const fetchClients = async () => {
       try {
          const response = await axios.get('http://localhost:8080/cliente/listar')
-
          setClients(response.data)
       } catch (error) {
          console.error('erro ao buscar clientes:', error)
@@ -105,6 +110,8 @@ export default function Clientes() {
       fetchClients()
    }, [])
 
+   const filteredClients = clients.filter((client) => client.nome.toLowerCase().includes(searchTerm.toLowerCase()))
+
    return (
       <>
          <Container>
@@ -116,11 +123,21 @@ export default function Clientes() {
                <Button type="button" onClick={handleOpenModal}>
                   Cadastrar novo
                </Button>
-               <input type="text" placeholder="pesquisar" />
+               <Input
+                  name="search"
+                  id="search"
+                  type="text"
+                  control={control}
+                  placeholder="Pesquisar"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                  width='400px'
+               />
             </Row>
+
             <CardContainer>
-               {clients.length > 0 ? (
-                  clients.map((client, index) => (
+               {filteredClients.length > 0 ? (
+                  filteredClients.map((client, index) => (
                      <Card
                         key={index}
                         name={client.nome}
@@ -133,8 +150,9 @@ export default function Clientes() {
                   <Alert>Nenhum cliente cadastrado.</Alert>
                )}
             </CardContainer>
+
             {showModal && (
-               <Modal isOpen onClose={handleCloseModal} title="Cadastro de cliente" width="1000px">
+               <Modal isOpen onClose={handleCloseModal} title="Cadastrar cliente" width="1000px">
                   <Form onSubmit={handleSubmit(saveClients)}>
                      <Row>
                         <Input name="nome" control={control} type="text" id="nome" placeholder="Nome do cliente" width="600px" />
@@ -166,7 +184,7 @@ export default function Clientes() {
                            control={control}
                            type="text"
                            id="complemento"
-                           placeholder="Complemento "
+                           placeholder="Complemento"
                            width="300px"
                         />
                      </Row>
