@@ -35,7 +35,7 @@ const CardContainer = styled.div`
    display: flex;
    flex-wrap: wrap;
    margin-top: 60px;
-   gap: 30px;
+   gap: 18px;
 `
 
 const Alert = styled.p`
@@ -179,7 +179,7 @@ export default function Clientes() {
                            control={control}
                            type="text"
                            id="endereco"
-                           placeholder="Endereco do cliente"
+                           placeholder="Endereço do cliente"
                            width="600px"
                         />
                      </Row>
