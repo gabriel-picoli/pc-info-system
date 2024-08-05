@@ -197,10 +197,12 @@ export default function Clientes() {
                      </Row>
 
                      <ButtonContainer>
-                        <Button type="reset" cancel onClick={handleCloseModal}>
+                        <Button type="reset" cancel onClick={handleCloseModal} width="150px">
                            Cancelar
                         </Button>
-                        <Button type="submit">Cadastrar</Button>
+                        <Button type="submit" width="150px">
+                           Cadastrar
+                        </Button>
                      </ButtonContainer>
                   </Form>
                </Modal>
