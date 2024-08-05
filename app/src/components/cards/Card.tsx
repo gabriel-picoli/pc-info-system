@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import Subtitle from '../tipography/Subtitle'
+
 import { insertMaskInCpf } from '../../functions/cpf'
 import { insertMaskInPhone } from '../../functions/phone'
 

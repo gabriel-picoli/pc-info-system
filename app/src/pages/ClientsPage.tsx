@@ -134,7 +134,7 @@ export default function Clientes() {
                   id="search"
                   type="text"
                   control={control}
-                  placeholder="Pesquisar"
+                  placeholder="teste pesquisar"
                   value={searchTerm}
                   onChange={handleSearchChange}
                   width="400px"
