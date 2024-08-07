@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-
-import { useState, useEffect } from 'react'
-
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import { useForm } from 'react-hook-form'
 
 import Title from '../components/tipography/Title'
 import Button from '../components/inputs/Button'
-import Card from '../components/cards/Card'
 import Modal from '../components/modal/Modal'
 import Input from '../components/inputs/Input'
+import Table from '../components/table/Table'
+
+import { insertMaskInCpf } from '../functions/cpf'
+import { insertMaskInPhone } from '../functions/phone'
 
 const Container = styled.div`
    display: flex;
@@ -31,15 +32,9 @@ const Row = styled.div`
    justify-content: space-between;
 `
 
-const CardContainer = styled.div`
-   display: flex;
-   flex-wrap: wrap;
-   margin-top: 60px;
-   gap: 18px;
-`
-
 const Alert = styled.p`
    font-size: 23px;
+   margin-top: 80px;
 `
 
 const Form = styled.form`
@@ -87,7 +82,7 @@ export default function Clientes() {
       setSearchTerm(event.target.value)
    }
 
-   const handleCardClick = (client: Clients) => {
+   const handleRowClick = (client: Clients) => {
       setSelectedClient(client)
       setShowModal(true)
    }
@@ -116,7 +111,31 @@ export default function Clientes() {
       fetchClients()
    }, [])
 
-   const filteredClients = clients.filter((client) => client.nome.toLowerCase().includes(searchTerm.toLowerCase()))
+   const filteredClients = clients.filter((client) => {
+      const searchTermLower = searchTerm.toLowerCase()
+      return (
+         client.nome.toLowerCase().includes(searchTermLower) ||
+         client.telefone.toLowerCase().includes(searchTermLower) ||
+         client.cpf.toLowerCase().includes(searchTermLower)
+      )
+   })
+   const columns = [
+      { header: 'Nome', accessor: 'nome' as keyof Clients },
+      {
+         header: 'Telefone',
+         accessor: 'telefone' as keyof Clients,
+         format: (value: any) => `${insertMaskInPhone(value)}`,
+      },
+      {
+         header: 'CPF',
+         accessor: 'cpf' as keyof Clients,
+         format: (value: any) => `${insertMaskInCpf(value)}`,
+      },
+      { header: 'Endereço', accessor: 'endereco' as keyof Clients },
+      { header: 'Bairro', accessor: 'bairro' as keyof Clients },
+      { header: 'Número', accessor: 'numero' as keyof Clients },
+      { header: 'Complemento', accessor: 'complemento' as keyof Clients },
+   ]
 
    return (
       <>
@@ -134,29 +153,18 @@ export default function Clientes() {
                   id="search"
                   type="text"
                   control={control}
-                  placeholder="teste pesquisar"
+                  placeholder="Pesquisar"
                   value={searchTerm}
                   onChange={handleSearchChange}
                   width="400px"
                />
             </Row>
 
-            <CardContainer>
-               {filteredClients.length > 0 ? (
-                  filteredClients.map((client, index) => (
-                     <Card
-                        key={index}
-                        name={client.nome}
-                        phone={client.telefone}
-                        cpf={client.cpf}
-                        address={`${client.endereco}, ${client.bairro} - ${client.numero}, ${client.complemento}`}
-                        onClick={() => handleCardClick(client)}
-                     />
-                  ))
-               ) : (
-                  <Alert>Nenhum cliente cadastrado.</Alert>
-               )}
-            </CardContainer>
+            {filteredClients.length > 0 ? (
+               <Table<Clients> columns={columns} data={filteredClients} onRowClick={handleRowClick} />
+            ) : (
+               <Alert>Nenhum cliente cadastrado.</Alert>
+            )}
 
             {showModal && (
                <Modal isOpen onClose={handleCloseModal} title="Cadastrar cliente" width="1000px">
