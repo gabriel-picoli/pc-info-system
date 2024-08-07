@@ -193,7 +193,7 @@ export default function Clientes() {
                      </Row>
                      <Row>
                         <Input name="bairro" control={control} type="text" id="bairro" placeholder="Bairro" width="400px" />
-                        <Input name="numero" control={control} type="number" id="numero" placeholder="Número" width="150px" />
+                        <Input name="numero" control={control} type="text" id="numero" placeholder="Número" width="150px" />
                         <Input
                            name="complemento"
                            control={control}
