@@ -5,8 +5,9 @@ import theme from './global/theme'
 
 import GlobalStyle from './global/GlobalStyle'
 
-import Home from './pages/Home'
+import Home from './pages/HomePage'
 import Clientes from './pages/ClientsPage'
+import Servicos from './pages/ServicesPage'
 
 export default function App() {
    return (
@@ -15,6 +16,7 @@ export default function App() {
             <Routes>
                <Route path="/" element={<Home />} />
                <Route path="/clientes" element={<Clientes />} />
+               <Route path="/servicos" element={<Servicos />} />
             </Routes>
 
             <GlobalStyle />
