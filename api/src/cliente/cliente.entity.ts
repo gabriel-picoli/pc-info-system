@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+
+import { Servico } from 'src/servico/servico.entity';
 
 @Entity()
 export class Cliente {
@@ -25,4 +27,7 @@ export class Cliente {
 
   @Column({ length: 100 })
   complemento: string;
+
+  @OneToMany(() => Servico, (servico) => servico.cliente)
+  servicos: Servico[];
 }
