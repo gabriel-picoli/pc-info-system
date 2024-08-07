@@ -1,5 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
+
 import { Cliente } from './cliente.entity';
 import { CadastrarClienteDto } from './dto/cliente.cadastrar.dto';
 import { ResultadoDto } from 'src/dto/resultado.dto';
@@ -16,27 +17,27 @@ export class ClienteService {
   }
 
   async cadastrar(data: CadastrarClienteDto): Promise<ResultadoDto> {
-    const cliente = new Cliente();
-
-    cliente.nome = data.nome;
-    cliente.telefone = data.telefone;
-    cliente.cpf = data.cpf;
-    cliente.endereco = data.endereco;
-    cliente.bairro = data.bairro;
-    cliente.numero = data.numero;
-    cliente.complemento = data.complemento;
+    const cliente = this.clienteRepository.create(data);
 
     try {
       await this.clienteRepository.save(cliente);
-      return {
-        status: true,
-        message: 'cliente cadastrado com sucesso',
-      };
+      return this.repostaSucesso('cliente cadastrado com sucesso');
     } catch (err) {
-      return {
-        status: false,
-        message: `erro ao cadastrar o cliente: ${err.message}`,
-      };
+      return this.repostaErro(`erro ao cadastrar cliente: ${err.message}`);
     }
+  }
+
+  private repostaSucesso(message: string): ResultadoDto {
+    return {
+      status: true,
+      message,
+    };
+  }
+
+  private repostaErro(message: string): ResultadoDto {
+    return {
+      status: false,
+      message,
+    };
   }
 }
