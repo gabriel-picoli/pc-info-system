@@ -52,6 +52,7 @@ const ButtonContainer = styled.div`
 `
 
 interface Clients {
+   id: number
    nome: string
    telefone: string
    cpf: string
@@ -82,7 +83,7 @@ export default function Clientes() {
       setSearchTerm(event.target.value)
    }
 
-   const handleRowClick = (client: Clients) => {
+   const handleClientRowClick = (client: Clients) => {
       setSelectedClient(client)
       setShowModal(true)
    }
@@ -98,12 +99,18 @@ export default function Clientes() {
 
    const saveClients = async (data: any) => {
       try {
-         const response = await axios.post('http://localhost:8080/cliente/cadastrar', data)
+         if (selectedClient) {
+            await axios.put(`http://localhost:8080/cliente/atualizar/${selectedClient.id}`, data)
+         } else {
+            await axios.post('http://localhost:8080/cliente/cadastrar', data)
+         }
          fetchClients()
+
+         console.log(selectedClient)
+
          handleCloseModal()
-         console.log(response.data)
       } catch (error) {
-         console.error('erro ao salvar cliente:', error)
+         console.error('Erro ao salvar cliente:', error)
       }
    }
 
@@ -137,85 +144,105 @@ export default function Clientes() {
       { header: 'Complemento', accessor: 'complemento' as keyof Clients },
    ]
 
+   useEffect(() => {
+      if (selectedClient) {
+         reset(selectedClient)
+         console.log(selectedClient)
+      }
+   }, [selectedClient, reset])
+
    return (
-      <>
-         <Container>
-            <Header>
-               <Title>Clientes</Title>
-            </Header>
+      <Container>
+         <Header>
+            <Title>Clientes</Title>
+         </Header>
 
-            <Row>
-               <Button type="button" onClick={handleOpenModal}>
-                  Cadastrar novo
-               </Button>
-               <Input
-                  name="search"
-                  id="search"
-                  type="text"
-                  control={control}
-                  placeholder="Pesquisar"
-                  value={searchTerm}
-                  onChange={handleSearchChange}
-                  width="400px"
-               />
-            </Row>
+         <Row>
+            <Button type="button" onClick={handleOpenModal}>
+               Cadastrar novo
+            </Button>
+            <Input
+               name="search"
+               id="search"
+               type="text"
+               control={control}
+               placeholder="Pesquisar"
+               onChange={handleSearchChange}
+               width="400px"
+            />
+         </Row>
 
-            {filteredClients.length > 0 ? (
-               <Table<Clients> columns={columns} data={filteredClients} onRowClick={handleRowClick} />
-            ) : (
-               <Alert>Nenhum cliente cadastrado.</Alert>
-            )}
+         {filteredClients.length > 0 ? (
+            <Table<Clients> columns={columns} data={filteredClients} onRowClick={handleClientRowClick} />
+         ) : (
+            <Alert>Nenhum cliente cadastrado.</Alert>
+         )}
 
-            {showModal && (
-               <Modal isOpen onClose={handleCloseModal} title="Cadastrar cliente" width="1000px">
-                  <Form onSubmit={handleSubmit(saveClients)}>
-                     <Row>
-                        <Input name="nome" control={control} type="text" id="nome" placeholder="Nome do cliente" width="600px" />
-                        <Input name="cpf" control={control} type="text" id="cpf" placeholder="CPF do cliente" width="300px" />
-                     </Row>
-                     <Row>
-                        <Input
-                           name="telefone"
-                           control={control}
-                           type="tel"
-                           id="telefone"
-                           placeholder="Telefone do cliente"
-                           width="300px"
-                        />
-                        <Input
-                           name="endereco"
-                           control={control}
-                           type="text"
-                           id="endereco"
-                           placeholder="Endereço do cliente"
-                           width="600px"
-                        />
-                     </Row>
-                     <Row>
-                        <Input name="bairro" control={control} type="text" id="bairro" placeholder="Bairro" width="400px" />
-                        <Input name="numero" control={control} type="text" id="numero" placeholder="Número" width="150px" />
-                        <Input
-                           name="complemento"
-                           control={control}
-                           type="text"
-                           id="complemento"
-                           placeholder="Complemento"
-                           width="300px"
-                        />
-                     </Row>
+         {showModal && (
+            <Modal isOpen onClose={handleCloseModal} title="Cadastrar cliente" width="1000px">
+               <Form onSubmit={handleSubmit(saveClients)}>
+                  <Row>
+                     <Input
+                        name="nome"
+                        control={control}
+                        type="text"
+                        id="nome"
+                        placeholder="Nome do cliente"
+                        width="600px"
+                        defaultValue={selectedClient?.nome}
+                     />
+                     <Input
+                        name="cpf"
+                        control={control}
+                        type="text"
+                        id="cpf"
+                        placeholder="CPF do cliente"
+                        width="300px"
+                        defaultValue={selectedClient?.cpf}
+                     />
+                  </Row>
+                  <Row>
+                     <Input
+                        name="telefone"
+                        control={control}
+                        type="tel"
+                        id="telefone"
+                        placeholder="Telefone do cliente"
+                        width="300px"
+                     />
+                     <Input
+                        name="endereco"
+                        control={control}
+                        type="text"
+                        id="endereco"
+                        placeholder="Endereço do cliente"
+                        width="600px"
+                     />
+                  </Row>
+                  <Row>
+                     <Input name="bairro" control={control} type="text" id="bairro" placeholder="Bairro" width="400px" />
+                     <Input name="numero" control={control} type="text" id="numero" placeholder="Número" width="150px" />
+                     <Input
+                        name="complemento"
+                        control={control}
+                        type="text"
+                        id="complemento"
+                        placeholder="Complemento"
+                        width="300px"
+                     />
+                  </Row>
 
-                     <ButtonContainer>
-                        <Button type="reset" cancel onClick={handleCloseModal} width="150px">
-                           Cancelar
-                        </Button>
-                        <Button type="submit" width="150px">
-                           Cadastrar
-                        </Button>
-                     </ButtonContainer>
-                  </Form>
-               </Modal>
-            )}
-         </Container>
-      </>
+                  <ButtonContainer>
+                     <Button type="reset" cancel onClick={handleCloseModal} width="150px">
+                        Cancelar
+                     </Button>
+                     <Button type="submit" width="150px">
+                        Cadastrar
+                     </Button>
+                  </ButtonContainer>
+               </Form>
+            </Modal>
+         )}
+      </Container>
    )
 }
