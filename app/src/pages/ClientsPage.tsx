@@ -44,7 +44,7 @@ const Form = styled.form`
    display: flex;
    flex-direction: column;
    gap: 20px;
-   margin-top: 20px;
+   margin: 40px 0 15px 0;
 `
 
 const ButtonContainer = styled.div`
@@ -243,7 +243,7 @@ export default function Clientes() {
                         Cancelar
                      </Button>
                      <Button type="submit" width="150px">
-                        Cadastrar
+                        Salvar
                      </Button>
                   </ButtonContainer>
                </Form>
