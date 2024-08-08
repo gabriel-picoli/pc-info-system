@@ -194,16 +194,6 @@ export default function Servicos() {
                         <Input name="data" control={control} type="date" id="data" placeholder="Data do serviço" width="300px" />
                         <Input name="valor" control={control} type="number" id="valor" placeholder="Valor" width="300px" />
                      </Row>
-                     <Row>
-                        <label htmlFor="cliente">Cliente:</label>
-                        <select id="cliente" {...register('clienteId')}>
-                           {clients.map((client) => (
-                              <option key={client.id} value={client.id}>
-                                 {client.nome}
-                              </option>
-                           ))}
-                        </select>
-                     </Row>
 
                      <ButtonContainer>
                         <Button type="reset" cancel onClick={handleCloseModal} width="150px">
