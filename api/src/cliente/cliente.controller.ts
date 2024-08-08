@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 
 import { ClienteService } from './cliente.service';
 import { Cliente } from './cliente.entity';
 import { CadastrarClienteDto } from './dto/cliente.cadastrar.dto';
 import { ResultadoDto } from 'src/dto/resultado.dto';
+import { AtualizarClienteDto } from './dto/cliente.atualizar.dto';
 
 @Controller('cliente')
 export class ClienteController {
@@ -17,5 +18,13 @@ export class ClienteController {
   @Post('cadastrar')
   async cadastrar(@Body() data: CadastrarClienteDto): Promise<ResultadoDto> {
     return this.clienteService.cadastrar(data);
+  }
+
+  @Put('atualizar/:id')
+  async atualizar(
+    @Param('id') id: number,
+    @Body() atualizarClienteDto: AtualizarClienteDto,
+  ) {
+    return this.clienteService.atualizar(id, atualizarClienteDto);
   }
 }
