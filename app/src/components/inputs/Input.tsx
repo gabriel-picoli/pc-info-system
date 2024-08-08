@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Controller, Control, FieldValues } from 'react-hook-form'
 import styled from 'styled-components'
 
@@ -21,11 +22,10 @@ const StyledInput = styled.input<{ $width?: string; $marginRight?: string }>`
 interface InputProps {
    name: string
    control: Control<FieldValues>
-   defaultValue?: string
+   defaultValue?: any
    width?: string
    marginRight?: string
    placeholder?: string
-   value?: string
    type: string
    id: string
    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
@@ -38,7 +38,6 @@ export default function Input({
    width,
    marginRight,
    placeholder,
-   value,
    type,
    id,
    onChange,
@@ -53,7 +52,6 @@ export default function Input({
                {...field}
                $width={width}
                $marginRight={marginRight}
-               value={value}
                type={type}
                id={id}
                placeholder={placeholder}
