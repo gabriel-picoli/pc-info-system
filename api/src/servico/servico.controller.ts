@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+} from '@nestjs/common';
 
 import { ServicoService } from './servico.service';
 import { CadastrarServicoDto } from './dto/servico.cadastrar';
@@ -12,6 +19,15 @@ export class ServicoController {
   @Get('listar')
   async listar(): Promise<Servico[]> {
     return this.servicoService.listar();
+  }
+
+  @Get(':id')
+  async buscarPorId(@Param('id') id: number): Promise<Servico> {
+    const servico = await this.servicoService.buscarPorId(id);
+    if (!servico) {
+      throw new NotFoundException(`Serviço com ID ${id} não encontrado`);
+    }
+    return servico;
   }
 
   @Post('cadastrar')
