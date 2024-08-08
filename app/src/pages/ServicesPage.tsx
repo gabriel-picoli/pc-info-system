@@ -1,16 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
-import styled from 'styled-components'
+import axios from 'axios'
 import { useForm } from 'react-hook-form'
+import styled from 'styled-components'
+import { format } from 'date-fns'
 
 import Title from '../components/tipography/Title'
 import Button from '../components/inputs/Button'
 import Modal from '../components/modal/Modal'
 import Input from '../components/inputs/Input'
-import Table from '../components/table/Table' // Importe o componente Table
+import Table from '../components/table/Table'
 
 const Container = styled.div`
    display: flex;
@@ -50,17 +52,25 @@ const ButtonContainer = styled.div`
 `
 
 interface Service {
-   description: string
-   date: string // Alterado para string, já que a data será formatada
+   descricao: string
+   data: string
+   valor: number
+   clienteId: number
+}
+
+interface Client {
+   id: number
+   nome: string
 }
 
 export default function Servicos() {
    const [services, setServices] = useState<Service[]>([])
+   const [clients, setClients] = useState<Client[]>([])
    const [showModal, setShowModal] = useState<boolean>(false)
    const [searchTerm, setSearchTerm] = useState<string>('')
    const [selectedService, setSelectedService] = useState<Service | null>(null)
 
-   const { handleSubmit, control, reset } = useForm()
+   const { handleSubmit, control, reset, register } = useForm()
 
    const handleOpenModal = () => {
       setShowModal(true)
@@ -80,18 +90,64 @@ export default function Servicos() {
       setShowModal(true)
    }
 
-   const saveService = (data: any) => {
-      // Simulando a adição de um novo serviço
-      setServices((prevServices) => [...prevServices, data])
-      handleCloseModal()
+   const fetchServices = async () => {
+      try {
+         const response = await axios.get('http://localhost:8080/servico/listar')
+         console.log('Dados recebidos da API:', response.data)
+         setServices(response.data)
+      } catch (error) {
+         console.error('Erro ao buscar serviços:', error)
+      }
    }
 
-   const filteredServices = services.filter((service) => service.description.toLowerCase().includes(searchTerm.toLowerCase()))
+   const fetchClients = async () => {
+      try {
+         const response = await axios.get('http://localhost:8080/cliente/listar')
+         setClients(response.data)
+      } catch (error) {
+         console.error('erro ao buscar clientes:', error)
+      }
+   }
+
+   const saveService = async (data: any) => {
+      try {
+         const response = await axios.post('http://localhost:8080/servico/cadastrar', data)
+         fetchServices()
+         handleCloseModal()
+         console.log(response.data)
+      } catch (error) {
+         console.error('erro ao salvar serviço:', error)
+      }
+   }
+
+   function formatDate(date: Date | string): string {
+      const d = typeof date === 'string' ? new Date(date) : date
+
+      if (isNaN(d.getTime())) {
+         return ''
+      }
+
+      return format(d, 'dd/MM/yyyy')
+   }
+
+   useEffect(() => {
+      fetchServices()
+      fetchClients()
+   }, [])
+
+   const filteredServices = services.filter((service) => {
+      const searchTermLower = searchTerm.toLowerCase()
+      return (
+         service.descricao.toLowerCase().includes(searchTermLower) ||
+         service.data.toLowerCase().includes(searchTermLower) ||
+         service.clienteId
+      )
+   })
 
    const columns = [
-      { header: 'Descrição', accessor: 'description' as keyof Service },
-      { header: 'Data', accessor: 'date' as keyof Service, format: (value: string) => new Date(value).toLocaleDateString() },
-      { header: 'Valor', accessor: 'value' as keyof Service },
+      { header: 'Descrição', accessor: 'descricao' as keyof Service },
+      { header: 'Data', accessor: 'data' as keyof Service, format: (value: any) => formatDate(value) },
+      { header: 'Valor', accessor: 'valor' as keyof Service, format: (value: any) => `R$ ${value.toFixed(2)}` },
    ]
 
    return (
@@ -128,15 +184,25 @@ export default function Servicos() {
                   <Form onSubmit={handleSubmit(saveService)}>
                      <Row>
                         <Input
-                           name="description"
+                           name="descricao"
                            control={control}
                            type="text"
-                           id="description"
+                           id="descricao"
                            placeholder="Descrição do serviço"
                            width="600px"
                         />
-                        <Input name="date" control={control} type="date" id="date" placeholder="Data do serviço" width="300px" />
-                        <Input name="value" control={control} type="number" id="value" placeholder="Valor" width="300px" />
+                        <Input name="data" control={control} type="date" id="data" placeholder="Data do serviço" width="300px" />
+                        <Input name="valor" control={control} type="number" id="valor" placeholder="Valor" width="300px" />
+                     </Row>
+                     <Row>
+                        <label htmlFor="cliente">Cliente:</label>
+                        <select id="cliente" {...register('clienteId')}>
+                           {clients.map((client) => (
+                              <option key={client.id} value={client.id}>
+                                 {client.nome}
+                              </option>
+                           ))}
+                        </select>
                      </Row>
 
                      <ButtonContainer>
