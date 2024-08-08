@@ -21,7 +21,7 @@ const ModalContainer = styled.div<{ width?: string; minHeight?: string; maxHeigh
    max-height: ${(props) => props.maxHeight || '700px'};
    overflow: auto;
    border-radius: 5px;
-   padding: 20px 30px;
+   padding: 30px;
 `
 
 const HeaderContainer = styled.div`
@@ -46,6 +46,11 @@ const CloseButton = styled.button`
    }
 `
 
+const Title = styled.h1`
+   font-size: 40px;
+   font-weight: bold;
+`
+
 interface ModalProps {
    isOpen: boolean
    onClose?: () => void
@@ -62,7 +67,7 @@ export default function Modal({ isOpen, onClose, children, width, minHeight, tit
          <ModalBackground>
             <ModalContainer width={width} minHeight={minHeight}>
                <HeaderContainer>
-                  <h1>{title}</h1>
+                  <Title>{title}</Title>
                   <CloseButton onClick={onClose}>
                      <img src="images/close.png" alt="close icon" width={25} height={25} />
                   </CloseButton>
