@@ -9,7 +9,7 @@ const StyledInput = styled.input<{ $width?: string; $marginRight?: string }>`
    border: 2px solid #18839e;
    border-radius: 5px;
    padding: 10px;
-   font-size: 14px;
+   font-size: 17px;
    color: ${(props) => props.theme.colors.black};
    margin-right: ${(props) => props.$marginRight || '0px'};
    outline: none;
