@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post } from '@nestjs/common';
 
 import { ClienteService } from './cliente.service';
 import { Cliente } from './cliente.entity';
-import { CadastrarClienteDto } from './dto/client.create.dto';
+import { CadastrarClienteDto } from './dto/cliente.cadastrar.dto';
 import { ResultadoDto } from 'src/dto/resultado.dto';
 
 @Controller('cliente')
