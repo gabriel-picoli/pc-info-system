@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+
 import React, { useState, useEffect } from 'react'
+
 import styled from 'styled-components'
 import axios from 'axios'
 import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 
 import Title from '../components/tipography/Title'
 import Button from '../components/inputs/Button'
@@ -101,8 +104,10 @@ export default function Clientes() {
       try {
          if (selectedClient) {
             await axios.put(`http://localhost:8080/cliente/atualizar/${selectedClient.id}`, data)
+            toast.success('Cliente atualizado com sucesso!')
          } else {
             await axios.post('http://localhost:8080/cliente/cadastrar', data)
+            toast.success('Cliente cadastrado com sucesso!')
          }
          fetchClients()
 
@@ -111,6 +116,7 @@ export default function Clientes() {
          handleCloseModal()
       } catch (error) {
          console.error('Erro ao salvar cliente:', error)
+         toast.error('Erro ao cadastrar cliente.')
       }
    }
 
