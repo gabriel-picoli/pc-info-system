@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 
 import { Servico } from './servico.entity';
@@ -17,6 +17,19 @@ export class ServicoService {
 
   async listar(): Promise<Servico[]> {
     return this.servicoRepository.find({ relations: ['cliente'] });
+  }
+
+  async buscarPorId(id: number): Promise<Servico> {
+    const servico = await this.servicoRepository.findOne({
+      where: { id },
+      relations: ['cliente'],
+    });
+
+    if (!servico) {
+      throw new NotFoundException(`Serviço com ID ${id} não encontrado`);
+    }
+
+    return servico;
   }
 
   async cadastrar(data: CadastrarServicoDto): Promise<ResultadoDto> {
